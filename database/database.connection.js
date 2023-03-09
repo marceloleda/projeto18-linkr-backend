@@ -14,4 +14,3 @@ const configDatabase = {
 };
 
 export const db = new Pool(configDatabase);
-
