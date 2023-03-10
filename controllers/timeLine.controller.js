@@ -2,6 +2,7 @@ import { db } from "../database/database.connection.js";
 import urlMetadata from 'url-metadata';
 
 export async function getPosts(req, res){
+    
     const user_id = '1';
     try{
         const {rows: posts} = await db.query(`
