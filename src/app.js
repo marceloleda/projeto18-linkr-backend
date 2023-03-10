@@ -13,7 +13,7 @@ const api = express();
 api.use(cors())
 api.use(express.json())
 
-api.use([authRouter, postsRouter, userRouter, hashRouter, likesRouter ])
+api.use([ authRouter, postsRouter, userRouter, hashRouter, likesRouter ])
 
 const PORT = process.env.PORT || 5000;
 api.listen(PORT, ()=>{
