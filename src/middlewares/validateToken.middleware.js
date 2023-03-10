@@ -3,7 +3,7 @@ import { db } from "../database/database.connection.js";
 export async function validateToken(req, res, next){
     const token = req.headers.authorization?.replace('Bearer ', '');
 
-    const {rows: isValidToken} = await db.query(`SELECT * FROM WHERE;`,
+    const {rows: isValidToken} = await db.query(`SELECT * FROM user WHERE;`,
     [token])
 
     try{
@@ -13,12 +13,11 @@ export async function validateToken(req, res, next){
         req.userId = isValidToken[0].userId
         next()
     }
-    catch(error){
+    catch(err){
         res.sendStatus(422)
         return
     }
 }
-
 
 export async function authValidation(req, res, next) {
     const { authorization } = req.headers;
