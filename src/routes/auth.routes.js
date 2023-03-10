@@ -6,8 +6,8 @@ import { signInSchema } from '../models/signin.schema.js';
 
 const authRouter = express.Router();
 
-router.post('/signup', validateSchema(signUpSchema), signUp);
-router.post('/signin', validateSchema(signInSchema), signIn);
+authRouter.post('/signup', validateSchema(signUpSchema), signUp);
+authRouter.post('/signin', validateSchema(signInSchema), signIn);
 
 
 export default authRouter;
