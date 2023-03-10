@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "api.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/api.js",
-    "dev": "nodemon src/api.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hapi/joi": "^17.1.1",
+    "@happ/joi": "^17.1.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
