@@ -1,9 +1,9 @@
 import express from 'express';
 import { list, show } from '../controllers/hashtag.controller';
 
-const router = express.Router();
+const hashRouter = express.Router();
 
-router.get('/hashtags/:limit?', list);
-router.get('/hashtags/:id', show);
+hashRouter.get('/hashtags/:limit?', list);
+hashRouter.get('/hashtags/:id', show);
 
-export default router;
+export default hashRouter;

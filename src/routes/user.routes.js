@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-const router = Router();
+const userRouter = Router();
 
-router.get('/', );
-router.get('/', );
+userRouter.get('/', );
+userRouter.get('/', );
 
-export default router;
+export default userRouter;
