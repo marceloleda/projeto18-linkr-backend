@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import dotenv from "dotenv";
 dotenv.config();
 
+export const PRIVATE_KEY = process.env.JWT_SECRET;
+
 export async function getUserByEmail(email) {
     return (await db.query(`SELECT * FROM users WHERE email = $1`, [email]))
   }
@@ -26,7 +28,7 @@ export async function signIn(req, res) {
       { expiresIn: '60m' })
 
     return res.status(200).send( { token, user } );
-    
+
   } catch (err) {
     res.status(500).send(err.message);
   }
