@@ -19,7 +19,14 @@ export async function createUser(user) {
 export async function signIn(req, res) {
   try {
     const user = res.locals.user;
-    res.status(200).send({ token, user });
+
+    const token = jsonwebtoken.sign(
+      { userId: JSON.stringify(userId) },
+      PRIVATE_KEY,
+      { expiresIn: '60m' })
+
+    return res.status(200).send( { token, user } );
+    
   } catch (err) {
     res.status(500).send(err.message);
   }
