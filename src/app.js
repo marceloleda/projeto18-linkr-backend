@@ -12,6 +12,7 @@ dotenv.config()
 const api = express();
 api.use(cors())
 api.use(express.json())
+//teste
 
 api.use([authRouter, postsRouter, userRouter, hashRouter, likesRouter ])
 
