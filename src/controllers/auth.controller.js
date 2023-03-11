@@ -1,32 +1,34 @@
 import { db } from "../database/database.connection.js";
 import bcrypt from 'bcrypt';
 import dotenv from "dotenv";
-import jwt from 'jsonwebtoken';
-
 dotenv.config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
+export const PRIVATE_KEY = process.env.JWT_SECRET;
 
 export async function getUserByEmail(email) {
-  const result = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-  return result.rows[0];
-}
-
+    return (await db.query(`SELECT * FROM users WHERE email = $1`, [email]))
+  }
+  
 export async function createUser(user) {
-  console.log('Creating user:', user);
-  await db.query(`INSERT INTO users (email, password, username, picture_url) VALUES ($1, $2, $3, $4)`, [
-    user.email,
-    user.password,
-    user.username,
-    user.picture_url
-  ]);
+    await db.query(`INSERT INTO users VALUES(DEFAULT, $1, $2, $3, $4)`, [
+        user.email,
+        user.password,
+        user.username,
+        user.picture_url
+    ]);
 }
 
 export async function signIn(req, res) {
   try {
     const user = res.locals.user;
-    const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).send({ token, user });
+
+    const token = jsonwebtoken.sign(
+      { userId: JSON.stringify(userId) },
+      PRIVATE_KEY,
+      { expiresIn: '60m' })
+
+    return res.status(200).send( { token, user } );
+
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -34,24 +36,22 @@ export async function signIn(req, res) {
 
 export async function signUp(req, res) {
   try {
-    const { email, password, username, picture_url } = req.body;
-    console.log("test")
+    const body = req.body;
 
-    const hasUserWithEmail = (await getUserByEmail(email)).length > 0;
+    const hasUserWithEmail = await getUserByEmail(body.email);
 
-    if (hasUserWithEmail) {
-      return res.status(409).send({ message: 'E-mail already registered.' });
-    }
-    const passwordHash = await bcrypt.hash(password, 10);
+    if (hasUserWithEmail) return res.sendStatus(409);
 
-    await createUser({ email, password: passwordHash, username, picture_url });
+    const passwordHash = bcrypt.hashSync(body.password, 10);
 
-    res.status(201).send({ message: 'User created successfully.' });
+    await createUser({ ...body, password: passwordHash });
+
+    res.sendStatus(201);
   } catch (err) {
     console.log(err);
     res.status(500).send({
       success: false,
-      message: "Error while registering",
+      message: "Erro ao cadastrar",
       exception: err,
     });
   }
