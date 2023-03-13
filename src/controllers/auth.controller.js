@@ -19,11 +19,19 @@ export async function createUser(user) {
 }
 
 export async function signIn(req, res) {
+  const {email, password} = req.body
+
   try {
-    const user = res.locals.user;
+    const body = req.body;
+
+    const hasUserWithEmail = await getUserByEmail(body.email);
+
+    if (hasUserWithEmail) return res.sendStatus(409);
+    
+    const user = db.query("SELECT * FROM users WHERE email = $1", [email])
 
     const token = jsonwebtoken.sign(
-      { userId: JSON.stringify(userId) },
+      { userId: JSON.stringify(user.userId) },
       PRIVATE_KEY,
       { expiresIn: '60m' })
 

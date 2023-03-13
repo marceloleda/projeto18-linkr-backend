@@ -36,7 +36,7 @@ export async function getPosts(req, res){
 }
 export async function createPost(req, res){
     const {link, description} = req.body;
-    const userId ='1';
+    const userId = res.locals.userId;
     try{
         await db.query(`INSERT INTO posts (user_id, link, description) VALUES ($1, $2, $3);`,
         [userId, link, description])
@@ -44,7 +44,7 @@ export async function createPost(req, res){
         const {rows: posts} = await db.query(`
         SELECT posts.id 
         FROM posts
-        ORDER BY posts.id
+        ORDER BY createdAt
         DESC
         LIMIT 1
         ;`)
@@ -52,13 +52,13 @@ export async function createPost(req, res){
         const metadata = await urlMetadata(`${link}`);
 
         const title = metadata.title;
-        const descriptio = metadata.description;
+        const linkDescription = metadata.description;
         const image = metadata.image;
         const url = metadata.url;
 
         await db.query(
             'INSERT INTO metadata_posts (post_id, image, description, title, url) VALUES ($1, $2, $3, $4, $5);',
-            [posts[0].id, image, descriptio, title, url]
+            [posts[0].id, image, linkDescription, title, url]
           );
         
         res.sendStatus(201)
